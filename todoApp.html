@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>ToDodoo</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+    <div>
+      <h1>Start your day!</h1>
+      <span>Enter your new todo: </span><input type="text" id="txtNewTodo" />
+      <br/>
+      <input type="button" id="btnAddTodo" value="Submit!!!" onclick="addTodoItem();" />
+    </div>
+    <div style="border: blue dotted 5px; padding: 10px; margin: 10px;" >
+        <div id="dvTodos">
+            no todos yet
+        </div>
+    </div>
+
+    <div style="margin:30px;padding:20px;">
+        <h2>dummy form</h2>
+        <form action="#">
+            <div class="form-group">
+              <label for="email">Email address:</label>
+              <input type="email" class="form-control" id="email">
+            </div>
+            <div class="form-group">
+              <label for="pwd">Password:</label>
+              <input type="password" class="form-control" id="pwd">
+            </div>
+            <div class="checkbox">
+              <label><input type="checkbox"> Remember me</label>
+            </div>
+            <button type="submit" class="btn btn-default">Submit</button>
+          </form>
+    </div>
+  </body>
+  
+  <style>
+    .todo-item {
+        border: rgb(68, 219, 54) solid 2px; 
+        padding: 3px;
+    }
+    
+  </style>
+
+  <script>
+    var todos = []; // this means I am creating/declaring a new array or list of stuff called todos
+   
+    //todos.push('return library books'); // these were the hard coded todos to test out the display
+    //todos.push('buy tp');
+
+    loadAndSetTodosFromHistory();
+
+    function addTodoItem() {
+        var theTodosTextBox = document.getElementById('txtNewTodo');
+        
+        todos.push(theTodosTextBox.value);
+
+        sendTodosToLocalStorage();
+
+        populateTodosDisplayFromLocalStorage();
+    }
+
+    function sendTodosToLocalStorage()
+    {
+        localStorage.setItem('myTodos', todos);
+    }
+
+    function loadAndSetTodosFromHistory() {
+        var todosFromLS = getTodosFromLS();
+        todos = todosFromLS;
+        populateTodosDisplayFromLocalStorage();
+    }
+
+    // function populateTodosDisplay() {
+    //     var theTodosDivOnThePage = document.getElementById('dvTodos');
+
+    //     if (todos.length > 0) {
+
+    //         var todosDisplay = '';
+    //         for(var i = 0; i < todos.length; i++)
+    //         {
+    //             todosDisplay = todosDisplay + '<div class="todo-item">' + todos[i] + '<input type="checkbox" style="float:right; " /></div>';
+    //         }
+            
+    //         theTodosDivOnThePage.innerHTML = todosDisplay;
+    //     }
+    // }
+
+    function populateTodosDisplayFromLocalStorage() {
+        var theTodosDivOnThePage = document.getElementById('dvTodos');
+
+        var localStorageTodosArray = getTodosFromLS();
+
+        if (localStorageTodosArray.length > 0) {
+
+            var todosDisplay = '';
+            for(var i = 0; i < localStorageTodosArray.length; i++)
+            {
+                todosDisplay = todosDisplay + '<div class="todo-item">' + localStorageTodosArray[i] + '<input type="checkbox" style="float:right; " /></div>';
+            }
+            
+            theTodosDivOnThePage.innerHTML = todosDisplay;
+        }
+    }
+
+    function getTodosFromLS() {
+        var localStorageTodosString = localStorage.getItem('myTodos');
+
+        return localStorageTodosString.split(',');
+    }
+
+    // setInterval(function(){ 
+    //    //document.getElementById('btnAddTodo').click();
+    // }, 5000);
+
+    var txtNewTodo = document.getElementById('txtNewTodo');
+    // Execute a function when the user releases a key on the keyboard
+    txtNewTodo.addEventListener("keyup", function(event) {
+    // Cancel the default action, if needed
+    event.preventDefault();
+    // Number 13 is the "Enter" key on the keyboard
+    if (event.keyCode === 13) {
+        // Trigger the button element with a click
+        document.getElementById('btnAddTodo').click();
+        txtNewTodo.value = '';
+    }
+    });
+    
+  </script>
+</html>
